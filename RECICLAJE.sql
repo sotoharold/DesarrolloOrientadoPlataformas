@@ -1,0 +1,72 @@
+﻿
+
+DROP TABLE DETALLE_TRANSACCION;
+DROP TABLE TRANSACCION;
+DROP TABLE PUBLICACION;
+DROP TABLE PRODUCTO;
+DROP TABLE MEDIO_PAGO;
+DROP TABLE USUARIO;
+DROP TABLE PERSONA;
+DROP TABLE TIPO_PERSONA;
+
+CREATE TABLE TIPO_PERSONA(
+id integer primary key,
+nombre varchar(10) 
+);
+
+CREATE TABLE PERSONA(
+cedula integer primary key,
+id_tipo_persona integer,
+nombre varchar(60),
+apellido varchar(60),
+correo varchar(60),
+direccion varchar(60),
+telefono integer,
+fecha_de_nacimiento date, foreign key (id_tipo_persona) references TIPO_PERSONA(id)
+);
+
+CREATE TABLE USUARIO(
+id integer primary key,
+cedula_persona integer,
+usuario varchar(30),
+contraseña varchar(30),foreign key (cedula_persona) references PERSONA(cedula)
+);
+
+CREATE TABLE MEDIO_PAGO(
+id integer primary key,
+nombre varchar(50)
+);
+
+CREATE TABLE PRODUCTO(
+id integer primary key,
+nombre varchar(30),
+precio integer
+);
+
+CREATE TABLE PUBLICACION(
+id integer primary key,
+id_producto integer,
+id_usuario integer, 
+precio integer,
+descripcion varchar(100),
+imagenes bit, foreign key (id_producto) references PRODUCTO(id), foreign key (id_usuario) references USUARIO(id)
+);
+
+CREATE TABLE TRANSACCION(
+id integer primary key,
+id_medio_pago integer,
+id_publicacion integer,
+id_usuario integer,
+fecha date, foreign key (id_medio_pago) references MEDIO_PAGO(id), foreign key (id_publicacion) references PUBLICACION(id),
+foreign key (id_usuario) references USUARIO(id)
+);
+
+CREATE TABLE DETALLE_TRANSACCION(
+
+id_producto integer,
+id_transaccion_T integer,
+id_publicacion_T integer,
+id_usuario_T integer,
+id_medio_pago_T integer,
+foreign key (id_transaccion_T) references TRANSACCION(id),foreign key (id_producto) references PRODUCTO(id)
+);
